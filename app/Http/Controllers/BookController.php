@@ -33,10 +33,10 @@ class BookController extends Controller
         }
 
         // SECURE
-        // $user = $book->user()->first();
+         $user = $book->user()->first();
 
-        // $userFiltered['name'] = $user->name;
-        // $userFiltered['email'] = $user->email;
+         $userFiltered['name'] = $user->name;
+         $userFiltered['email'] = $user->email;
 
         return response()->json([
             'data' => $book,

@@ -20,7 +20,7 @@ class AuthController extends Controller
         'name' => 'required',
         'email' => 'required|email',
         // SECURE
-        //'password' => 'required|regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-=+])[A-Za-z\d!@#$%^&*()_\-=+]{8,20}$/',  
+        'password' => 'required|regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-=+])[A-Za-z\d!@#$%^&*()_\-=+]{8,20}$/',  
         'password' => 'required',
         
         'c_password' => 'required|same:password',
@@ -92,7 +92,7 @@ class AuthController extends Controller
         // $newCode = SMS::generateCode();
         // $user->smsCode = $newCode;
         // $user->save();
-        // SMS::send($user->phone, ['Please don't share this code: $user->smsCode']);
+        // SMS::send($user->phone, ["Please don't share this code: $user->smsCode"]);
         
         return response()->json([
             'data' => 'SMS sent to $user->phone',
@@ -112,32 +112,32 @@ class AuthController extends Controller
     function getUserInfo($id) {
         
         // SECURE (manual)
-        // $token = $request->bearerToken();
-        // // 5|mUEqxncaO2zLLKtCSlLQoGeoxkS46FkygBItGRdAd7a0ab93
-        // $parts = explode('|', $token);
-        // // array:2 [ // app/Http/Controllers/AuthController.php:115
-        // //   0 => "5"
-        // //   1 => "mUEqxncaO2zLLKtCSlLQoGeoxkS46FkygBItGRdAd7a0ab93"
-        // // ]
-        // $hashedToken = hash('sha256', $parts[1]);
-        // // Cerca il token nel database
-        // $tokenRecord = PersonalAccessToken::where('token', $hashedToken)->first();
-        // // Recuper l'user
-        // $user = User::find($tokenRecord->tokenable_id);
+         $token = $request->bearerToken();
+          5|mUEqxncaO2zLLKtCSlLQoGeoxkS46FkygBItGRdAd7a0ab93
+         $parts = explode('|', $token);
+          array:2 [app/Http/Controllers/AuthController.php:115
+            0 => "5"
+            1 => "mUEqxncaO2zLLKtCSlLQoGeoxkS46FkygBItGRdAd7a0ab93"
+         ];
+         $hashedToken = hash('sha256', $parts[1]);
+         // Cerca il token nel database
+         $tokenRecord = PersonalAccessToken::where('token', $hashedToken)->first();
+         // Recuper l'user
+         $user = User::find($tokenRecord->tokenable_id);
         
-        // if(!$user){
-        //     return response()->json(['error' =>  ['Unauthorised']]);
-        // }
+         if(!$user){
+             return response()->json(['error' =>  ['Unauthorised']]);
+         }
         
         // SECURE (con Auth)
-        // if(!$user = Auth::user()){
-        //     return response()->json(['error' =>  ['Unauthorised']]);
-        // }
+         if(!$user = Auth::user()){
+             return response()->json(['error' =>  ['Unauthorised']]);
+         }
 
         // UNSECURE
-        if(!$user = User::find($id)){
-            return response()->json(['error' =>  ['User not found']]);
-        };
+        // if(!$user = User::find($id)){
+        //     return response()->json(['error' =>  ['User not found']]);
+        // };
 
         return response()->json([
             'data' => $user,
